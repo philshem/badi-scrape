@@ -3,7 +3,7 @@ name: Scrape Badi
 on:
   push:
   schedule:
-    - cron: '*/10 3-9 * * *'  # Every 10 minutes from 3:00 AM to 9:50 AM UTC
+    - cron: '5,25,45 3-9 * * *'  # Every 10 minutes from 3:00 AM to 9:50 AM UTC
   workflow_dispatch:
 
 jobs:
