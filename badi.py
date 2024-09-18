@@ -1,3 +1,6 @@
+
+import csv
+import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -41,10 +44,24 @@ def get_guest_count(url):
         # Close the browser window
         driver.quit()
 
-# URL to scrape
-url = "https://www.stadt-zuerich.ch/ssd/de/index/sport/schwimmen/hallenbaeder/hallenbad_city.html"
+    return guest_count
 
-# Get and print the guest count
-guest_count = get_guest_count(url)
-print(url, guest_count)
+def main():
+    url = "https://www.stadt-zuerich.ch/ssd/de/index/sport/schwimmen/hallenbaeder/hallenbad_city.html"
+
+    # Get and print the guest count
+    guest_count = get_guest_count(url)
+    print(url, guest_count)
+    
+    # Write to CSV
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open('data/out.csv', 'a') as file:
+        writer = csv.writer(file)
+        writer.writerow([timestamp, url, guest_count])
+
+    print(f"Data written to CSV: {timestamp}, {url}, {guest_count}")
+
+if __name__ == "__main__":
+    main()
+
 

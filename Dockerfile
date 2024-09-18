@@ -13,16 +13,12 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy the Python script and entrypoint script into the container
+# Copy the Python script and ensure it's executable
 COPY badi.py .
-COPY entrypoint.sh .
+RUN chmod +x badi.py
 
 # Create the data directory
 RUN mkdir -p data
-COPY data/out.csv data/out.csv
 
-# Make the entrypoint script executable
-RUN chmod +x entrypoint.sh
-
-# Set the entry point to the entrypoint script
-ENTRYPOINT ["./entrypoint.sh"]
+# Run the Python script
+CMD ["python3", "badi.py"]

@@ -25,7 +25,9 @@ jobs:
 
     - name: Run Docker container
       run: |
-        docker run --rm --name badi-scraper-container badi-scraper-image
+- name: Run Docker container
+  run: |
+    docker run --rm -v ${{ github.workspace }}/data:/app/data --name badi-scraper-container badi-scraper-image
 
     - name: Commit and push data/out.csv
       uses: github-actions-x/commit@v2.9
