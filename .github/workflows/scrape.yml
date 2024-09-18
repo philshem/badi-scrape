@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build-and-run:
+  build-run-and-commit:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +21,21 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t badi-scrape-image .
+        docker build -t my-scraper-image .
 
     - name: Run Docker container
       run: |
-        docker run --rm --name badi-scrape-container badi-scrape-image
+        docker run --rm --name my-scraper-container my-scraper-image
+
+    - name: Check for changes in data/out.csv
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        
+        # Add and commit changes if any
+        git add data/out.csv
+        git diff --cached --quiet || git commit -m "Update data/out.csv"
+
+    - name: Push changes
+      run: |
+        git push

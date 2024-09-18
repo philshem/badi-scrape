@@ -31,10 +31,6 @@ def get_guest_count(url):
         # Get the sibling element containing the guest count
         guest_count_value = guest_count_element.find_element(By.XPATH, "following-sibling::*").text.strip()
         
-        # Check if the guest count is available
-        if guest_count_value == '-':
-            return None  # or return 0 if you prefer
-        
         # Try converting the guest count to an integer
         try:
             return int(guest_count_value)
@@ -50,7 +46,5 @@ url = "https://www.stadt-zuerich.ch/ssd/de/index/sport/schwimmen/hallenbaeder/ha
 
 # Get and print the guest count
 guest_count = get_guest_count(url)
-if guest_count is not None:
-    print(f"Anzahl Gäste: {guest_count}")
-else:
-    print("Anzahl Gäste is not available.")
+print(url, guest_count)
+

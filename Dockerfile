@@ -16,7 +16,11 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy the Python script into the container
 COPY badi.py .
 
+# Create the data directory
+RUN mkdir -p data
+
+# Verify ChromeDriver installation
 RUN which chromedriver
 
-# Set the entry point
-CMD ["python3", "badi.py"]
+# Set the entry point to a shell script
+ENTRYPOINT ["./entrypoint.sh"]
