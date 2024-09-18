@@ -27,12 +27,12 @@ jobs:
       run: |
         docker run --rm --name my-scraper-container my-scraper-image
 
-    - name: push
+    - name: Commit and push data/out.csv
       uses: github-actions-x/commit@v2.9
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'main'
-        commit-message: 'publish'
+        commit-message: 'Update data/out.csv'
         force-add: 'true'
         files: data/out.csv
         name: GitHub Actions
