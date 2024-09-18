@@ -14,6 +14,8 @@ COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Run the scraping and analysis script
+COPY swimmers.csv .
+
 COPY badi.py .
 RUN chmod +x badi.py
 
