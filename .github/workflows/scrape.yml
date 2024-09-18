@@ -1,6 +1,7 @@
 name: Scrape Badi
 
 on:
+  push:
   schedule:
     - cron: '*/10 * * * *'
   workflow_dispatch:
@@ -8,6 +9,7 @@ on:
 jobs:
   build-run-and-commit:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
 
