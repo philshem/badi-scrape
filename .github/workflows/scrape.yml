@@ -34,6 +34,6 @@ jobs:
         push-branch: 'main'
         commit-message: 'Update data'
         force-add: 'true'
-        files: data/swimmers.csv data/swimmers.png
+        files: data/swimmers.csv data/swimmers_heatmap.png data/swimmers_heatmap_data.csv
         name: GitHub Actions
         email: actions@github.com

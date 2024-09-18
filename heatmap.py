@@ -48,13 +48,24 @@ fig.update_layout(
 
 # Save the plot as a PNG file
 try:
-    fig.write_image("data/swimmers.png")
-    print("Heatmap has been saved as 'swimmers.png'")
+    fig.write_image("data/swimmers_heatmap.png")
+    print("Heatmap has been saved as 'swimmers_heatmap.png'")
 except Exception as e:
     print(f"An error occurred while saving the image: {e}")
     print("Attempting to display the plot instead...")
     fig.show()
 
-# Print the pivot table for debugging
-print("\nPivot Table Data:")
-print(pivot_table)
+# Save the pivot table data as a CSV file
+try:
+    # Reset the index to turn the day_of_week into a column
+    pivot_table_reset = pivot_table.reset_index()
+    
+    # Replace numeric day_of_week with day names
+    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    pivot_table_reset['day_of_week'] = pivot_table_reset['day_of_week'].map(lambda x: day_names[x])
+    
+    # Save to CSV
+    pivot_table_reset.to_csv('data/swimmers_heatmap_data.csv', index=False)
+    print("Heatmap data has been saved as 'swimmers_heatmap_data.csv'")
+except Exception as e:
+    print(f"An error occurred while saving the CSV file: {e}")
