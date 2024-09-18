@@ -24,5 +24,4 @@ RUN chmod +x badi.py
 RUN chmod +x heatmap.py
 RUN chmod +x entrypoint.sh
 
-# Set the entry point
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
