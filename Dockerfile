@@ -19,6 +19,7 @@ COPY entrypoint.sh .
 
 # Create the data directory
 RUN mkdir -p data
+COPY data/out.csv data/out.csv
 
 # Make the entrypoint script executable
 RUN chmod +x entrypoint.sh
