@@ -1,0 +1,43 @@
+name: Run Badi Web Scraper
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          sudo apt-get install -y unzip
+          
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
+
+          wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          
+          # Ensure ChromeDriver has executable permissions
+          chmod +x chromedriver
+
+          # Install Python packages
+          python -m pip install --upgrade pip
+          pip install selenium
+
+      - name: Run web scraper
+        run: |
+          python badi.py  # Replace with the path to your Python script
