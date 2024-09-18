@@ -21,18 +21,18 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t my-scraper-image .
+        docker build -t badi-scraper-image .
 
     - name: Run Docker container
       run: |
-        docker run --rm --name my-scraper-container my-scraper-image
+        docker run --rm --name badi-scraper-container badi-scraper-image
 
     - name: Commit and push data/out.csv
       uses: github-actions-x/commit@v2.9
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'main'
-        commit-message: 'Update data/out.csv'
+        commit-message: 'Update to data/out.csv'
         force-add: 'true'
         files: data/out.csv
         name: GitHub Actions
