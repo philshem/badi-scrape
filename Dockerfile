@@ -16,5 +16,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy the Python script into the container
 COPY badi.py .
 
+RUN which chromedriver
+
 # Set the entry point
 CMD ["python3", "badi.py"]
