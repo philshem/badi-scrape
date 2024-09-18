@@ -28,13 +28,12 @@ jobs:
         docker run --rm --name my-scraper-container my-scraper-image
 
     - name: push
-      uses: github-actions-x/commit@v2.7
-      if: success()
+      uses: github-actions-x/commit@v2.9
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'main'
-        commit-message: 'auto-data-update'
+        commit-message: 'publish'
         force-add: 'true'
         files: data/out.csv
-        name: 'GitHub Actions'
-        email: 'actions@github.com'
+        name: GitHub Actions
+        email: actions@github.com
