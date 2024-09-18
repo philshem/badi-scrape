@@ -40,7 +40,7 @@ fig = go.Figure(data=go.Heatmap(
 
 # Update layout
 fig.update_layout(
-    title='Average Number of Swimmers by Day and Hour',
+    title='Hallenbad City (Zürich): Average Count of Swimmers by Day and Hour',
     xaxis_title='Hour of Day',
     yaxis_title='Day of Week',
     xaxis=dict(tickmode='linear', tick0=0, dtick=1),
