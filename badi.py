@@ -55,7 +55,7 @@ def main():
     
     # Write to CSV
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open('data/out.csv', 'a') as file:
+    with open('swimmers.csv', 'a') as file:
         writer = csv.writer(file)
         writer.writerow([timestamp, url, guest_count])
 

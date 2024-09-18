@@ -22,13 +22,13 @@ jobs:
     - name: Run Docker container
       run: |
         docker run --rm -v ${{ github.workspace }}/data:/app/data --name badi-scraper-container badi-scraper-image
-    - name: Commit and push data/out.csv
+    - name: Commit and push data
       uses: github-actions-x/commit@v2.9
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'main'
-        commit-message: 'Update data/out.csv'
+        commit-message: 'Update data'
         force-add: 'true'
-        files: data/out.csv
+        files: swimmers.csv swimmers.png
         name: GitHub Actions
         email: actions@github.com

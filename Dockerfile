@@ -13,12 +13,12 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy the Python script and ensure it's executable
+# Run the scraping script
 COPY badi.py .
 RUN chmod +x badi.py
-
-# Create the data directory
-RUN mkdir -p data
-
-# Run the Python script
 CMD ["python3", "badi.py"]
+
+# Run the analysis script
+COPY heatmap.py .
+RUN chmod +x heatmap.py
+CMD ["python3", "heatmap.py"]
