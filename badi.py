@@ -1,22 +1,20 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+
+# Set up Chrome options
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
 
 def get_guest_count(url):
-    # Path to the local ChromeDriver
-    chrome_driver_path = './chromedriver'  # Update if using a different path
     
-    # Set up Chrome options
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')  # Run Chrome in headless mode
-    
-    # Set up the WebDriver service with the path to the local ChromeDriver
-    service = Service(executable_path=chrome_driver_path)
-    
-    # Initialize WebDriver with the specified options and service
+    # Path to ChromeDriver
+    chrome_driver_path = "/usr/bin/chromedriver"
+
+    # Initialize Chrome WebDriver
+    service = Service(chrome_driver_path)
     driver = webdriver.Chrome(service=service, options=chrome_options)
     
     try:
