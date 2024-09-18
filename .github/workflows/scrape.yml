@@ -32,7 +32,7 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'main'
-        commit-message: 'Update to data/out.csv'
+        commit-message: 'Update data/out.csv'
         force-add: 'true'
         files: data/out.csv
         name: GitHub Actions
