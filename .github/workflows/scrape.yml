@@ -24,21 +24,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Google Chrome
+      - name: Install Specific Version of Google Chrome and ChromeDriver
         run: |
           CHROME_VERSION="116.0.5845.96"
-          wget "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+          CHROME_DRIVER_VERSION="116.0.5845.96"
+          
           sudo apt-get update
+          sudo apt-get install -y wget gnupg
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          
+          wget "https://storage.googleapis.com/downloads.chrome/116.0.5845.96/google-chrome-stable_current_amd64.deb"
           sudo apt-get install -y ./google-chrome-stable_current_amd64.deb
 
-      - name: Install ChromeDriver
-        run: |
-          CHROME_DRIVER_VERSION="116.0.5845.96"
           wget "https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/
           chmod +x /usr/local/bin/chromedriver
-
 
       - name: Run Python script
         run: |
