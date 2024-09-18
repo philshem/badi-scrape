@@ -13,8 +13,10 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
+RUN mkdir -p data
+
 # Copy Python scripts and the entrypoint script
-COPY swimmers.csv .
+COPY data/swimmers.csv .
 COPY badi.py .
 COPY heatmap.py .
 COPY entrypoint.sh .
@@ -24,4 +26,6 @@ RUN chmod +x badi.py
 RUN chmod +x heatmap.py
 RUN chmod +x entrypoint.sh
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+RUN mkdir -p data
+
+ENTRYPOINT ["./entrypoint.sh"]

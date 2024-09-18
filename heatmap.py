@@ -4,7 +4,7 @@ from pytz import timezone
 import numpy as np
 
 # Read the CSV data
-df = pd.read_csv('swimmers.csv')
+df = pd.read_csv('data/swimmers.csv')
 
 # Convert ts_utc to datetime and set it as the index
 df['ts_utc'] = pd.to_datetime(df['ts_utc'])
@@ -48,7 +48,7 @@ fig.update_layout(
 
 # Save the plot as a PNG file
 try:
-    fig.write_image("swimmers.png")
+    fig.write_image("data/swimmers.png")
     print("Heatmap has been saved as 'swimmers.png'")
 except Exception as e:
     print(f"An error occurred while saving the image: {e}")
