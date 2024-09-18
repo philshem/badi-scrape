@@ -13,14 +13,14 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Run the scraping and analysis script
+# Copy Python scripts and the entrypoint script
 COPY swimmers.csv .
-
 COPY badi.py .
-RUN chmod +x badi.py
-
 COPY heatmap.py .
-RUN chmod +x heatmap.py
+COPY entrypoint.sh .
 
-CMD ["python3", "badi.py"]
-CMD ["python3", "heatmap.py"]
+# Make sure scripts are executable
+RUN chmod +x badi.py heatmap.py entrypoint.sh
+
+# Set the entry point
+ENTRYPOINT ["./entrypoint.sh"]
