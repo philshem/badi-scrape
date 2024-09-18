@@ -13,14 +13,15 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy the Python script into the container
+# Copy the Python script and entrypoint script into the container
 COPY badi.py .
+COPY entrypoint.sh .
 
 # Create the data directory
 RUN mkdir -p data
 
-# Verify ChromeDriver installation
-RUN which chromedriver
+# Make the entrypoint script executable
+RUN chmod +x entrypoint.sh
 
-# Set the entry point to a shell script
+# Set the entry point to the entrypoint script
 ENTRYPOINT ["./entrypoint.sh"]
