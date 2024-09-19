@@ -55,14 +55,22 @@ except Exception as e:
     print("Attempting to display the plot instead...")
     fig.show()
 
-# Save the pivot table data as a CSV file
 try:
     # Reset the index to turn the day_of_week into a column
     pivot_table_reset = pivot_table.reset_index()
     
-    # Replace numeric day_of_week with day names
+    # Define day names in the desired order (Monday to Sunday)
     day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    pivot_table_reset['day_of_week'] = pivot_table_reset['day_of_week'].map(lambda x: day_names[x])
+    
+    # Create a mapping dictionary
+    day_map = {i: day for i, day in enumerate(day_names)}
+    
+    # Replace numeric day_of_week with day names
+    pivot_table_reset['day_of_week'] = pivot_table_reset['day_of_week'].map(day_map)
+    
+    # Sort the DataFrame by the custom day order
+    pivot_table_reset['day_order'] = pivot_table_reset['day_of_week'].map({day: i for i, day in enumerate(day_names)})
+    pivot_table_reset = pivot_table_reset.sort_values('day_order').drop('day_order', axis=1)
     
     # Save to CSV
     pivot_table_reset.to_csv('data/swimmers_heatmap_data.csv', index=False)
