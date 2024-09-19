@@ -27,18 +27,32 @@ def get_guest_count(url):
         # Open the URL
         driver.get(url)
         
-        # Wait for the "Anzahl Gäste" element to load (with a timeout of 10 seconds)
+        # Wait for the "Anzahl Gäste" element to load (with a timeout of 20 seconds)
         wait = WebDriverWait(driver, 10)
         guest_count_element = wait.until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Anzahl Gäste')]")))
         
         # Get the sibling element containing the guest count
         guest_count_value = guest_count_element.find_element(By.XPATH, "following-sibling::*").text.strip()
         
-        # Try converting the guest count to an integer
-        try:
+        # Handle different cases
+        if guest_count_value == "-":
+            return None
+        elif guest_count_value.isdigit():
             return int(guest_count_value)
-        except ValueError:
-            raise ValueError(f"Could not convert '{guest_count_value}' to an integer.")
+        else:
+            raise ValueError(f"Unexpected guest count value: '{guest_count_value}'")
+    
+    except TimeoutException:
+        print("Timeout occurred: The element 'Anzahl Gäste' was not found within 20 seconds.")
+        return None
+    
+    except NoSuchElementException:
+        print("Element not found: Unable to locate the 'Anzahl Gäste' element or its sibling.")
+        return None
+    
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+        return None
     
     finally:
         # Close the browser window
