@@ -29,11 +29,14 @@ full_index = pd.Index(range(7), name='day_of_week')
 full_columns = pd.Index(range(24), name='hour')
 pivot_table = pivot_table.reindex(index=full_index, columns=full_columns, fill_value=0)
 
+# Define day names in the correct order (Monday to Sunday)
+day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
 # Create the heatmap
 fig = go.Figure(data=go.Heatmap(
     z=pivot_table.values,
     x=pivot_table.columns,
-    y=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    y=day_names,  # Use the day_names list directly here
     hoverongaps=False,
     colorscale='Viridis'
 ))
@@ -44,6 +47,7 @@ fig.update_layout(
     xaxis_title='Hour of Day',
     yaxis_title='Day of Week',
     xaxis=dict(tickmode='linear', tick0=0, dtick=1),
+    yaxis=dict(autorange='reversed')  # This ensures Monday is at the top
 )
 
 # Save the plot as a PNG file
@@ -55,25 +59,11 @@ except Exception as e:
     print("Attempting to display the plot instead...")
     fig.show()
 
+# Save the data to CSV
 try:
-    # Assuming pivot_table is already defined
-    # Reset the index to turn the day_of_week into a column
+    # Create a new DataFrame with named days
     pivot_table_reset = pivot_table.reset_index()
-    
-    # Define day names in the desired order (Monday to Sunday)
-    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    
-    # Create a mapping dictionary
-    day_map = {i: day for i, day in enumerate(day_names)}
-    
-    # Replace numeric day_of_week with day names
-    pivot_table_reset['day_of_week'] = pivot_table_reset['day_of_week'].map(day_map)
-    
-    # Convert day_of_week to categorical data type with custom order
-    pivot_table_reset['day_of_week'] = pd.Categorical(pivot_table_reset['day_of_week'], categories=day_names, ordered=True)
-    
-    # Sort the DataFrame by the categorical day order
-    pivot_table_reset = pivot_table_reset.sort_values('day_of_week')
+    pivot_table_reset['day_of_week'] = pivot_table_reset['day_of_week'].map(dict(enumerate(day_names)))
     
     # Save to CSV
     pivot_table_reset.to_csv('data/swimmers_heatmap_data.csv', index=False)
