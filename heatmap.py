@@ -56,6 +56,7 @@ except Exception as e:
     fig.show()
 
 try:
+    # Assuming pivot_table is already defined
     # Reset the index to turn the day_of_week into a column
     pivot_table_reset = pivot_table.reset_index()
     
@@ -68,9 +69,11 @@ try:
     # Replace numeric day_of_week with day names
     pivot_table_reset['day_of_week'] = pivot_table_reset['day_of_week'].map(day_map)
     
-    # Sort the DataFrame by the custom day order
-    pivot_table_reset['day_order'] = pivot_table_reset['day_of_week'].map({day: i for i, day in enumerate(day_names)})
-    pivot_table_reset = pivot_table_reset.sort_values('day_order').drop('day_order', axis=1)
+    # Convert day_of_week to categorical data type with custom order
+    pivot_table_reset['day_of_week'] = pd.Categorical(pivot_table_reset['day_of_week'], categories=day_names, ordered=True)
+    
+    # Sort the DataFrame by the categorical day order
+    pivot_table_reset = pivot_table_reset.sort_values('day_of_week')
     
     # Save to CSV
     pivot_table_reset.to_csv('data/swimmers_heatmap_data.csv', index=False)
