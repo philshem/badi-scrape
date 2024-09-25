@@ -79,13 +79,14 @@ def main():
     guest_count = get_guest_count(url)
     print(url, guest_count)
 
-    # Write to CSV
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open("data/swimmers.csv", "a") as file:
-        writer = csv.writer(file)
-        writer.writerow([timestamp, url, guest_count])
+    if guest_count >= 0:
+        # Write to CSV
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open("data/swimmers.csv", "a") as file:
+            writer = csv.writer(file)
+            writer.writerow([timestamp, url, guest_count])
 
-    print(f"Data written to CSV: {timestamp}, {url}, {guest_count}")
+        print(f"Data written to CSV: {timestamp}, {url}, {guest_count}")
 
 
 if __name__ == "__main__":
