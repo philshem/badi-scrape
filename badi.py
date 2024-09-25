@@ -79,7 +79,7 @@ def main():
     guest_count = get_guest_count(url)
     print(url, guest_count)
 
-    if guest_count >= 0:
+    if guest_count is not None and guest_count >= 0:
         # Write to CSV
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open("data/swimmers.csv", "a") as file:
