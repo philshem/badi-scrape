@@ -1,92 +1,43 @@
 import csv
 import datetime
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-
-# Set up Chrome options
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
+import websockets
+import json
+import asyncio
 
 
-def get_guest_count(url):
+async def fetch_anzahl_gaeste(uri):
 
-    # Path to ChromeDriver
-    chrome_driver_path = "/usr/bin/chromedriver"
+    async with websockets.connect(uri) as websocket:
+        # Send a request to fetch all data
+        await websocket.send("all")
 
-    # Initialize Chrome WebDriver
-    service = Service(chrome_driver_path)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+        # Receive response
+        response = await websocket.recv()
+        data = json.loads(response)
 
-    try:
-        # Open the URL
-        driver.get(url)
-
-        # Wait for the "Anzahl Gäste" element to load (with a timeout of 20 seconds)
-        wait = WebDriverWait(driver, 10)
-        guest_count_element = wait.until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//*[contains(text(), 'Anzahl Gäste')]")
-            )
-        )
-
-        # Get the sibling element containing the guest count
-        guest_count_value = guest_count_element.find_element(
-            By.XPATH, "following-sibling::*"
-        ).text.strip()
-
-        # Handle different cases
-        if guest_count_value == "-":
-            return None
-        elif guest_count_value.isdigit():
-            return int(guest_count_value)
-        else:
-            raise ValueError(f"Unexpected guest count value: '{guest_count_value}'")
-
-    except TimeoutException:
-        print(
-            "Timeout occurred: The element 'Anzahl Gäste' was not found within 20 seconds."
-        )
-        return None
-
-    except NoSuchElementException:
-        print(
-            "Element not found: Unable to locate the 'Anzahl Gäste' element or its sibling."
-        )
-        return None
-
-    except Exception as e:
-        print(f"An unexpected error occurred: {str(e)}")
-        return None
-
-    finally:
-        # Close the browser window
-        driver.quit()
-
-    return guest_count
+        # Find the entry for "SSD-4" or similar
+        for entry in data:
+            if entry.get("uid") == "SSD-4":
+                anzahl_gaeste = entry.get("currentfill")
+                print(f"Anzahl Gäste: {anzahl_gaeste}")
+                return int(anzahl_gaeste)
 
 
 def main():
-    url = "https://www.stadt-zuerich.ch/ssd/de/index/sport/schwimmen/hallenbaeder/hallenbad_city.html"
+    uri = "wss://badi-public.crowdmonitor.ch:9591/api"
 
     # Get and print the guest count
-    guest_count = get_guest_count(url)
-    print(url, guest_count)
+    guest_count = asyncio.run(fetch_anzahl_gaeste(uri))
+    print(uri, guest_count)
 
     if guest_count is not None and guest_count >= 0:
         # Write to CSV
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open("data/swimmers.csv", "a") as file:
             writer = csv.writer(file)
-            writer.writerow([timestamp, url, guest_count])
+            writer.writerow([timestamp, uri, guest_count])
 
-        print(f"Data written to CSV: {timestamp}, {url}, {guest_count}")
+        print(f"Data written to CSV: {timestamp}, {uri}, {guest_count}")
 
 
 if __name__ == "__main__":
