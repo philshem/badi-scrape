@@ -19,7 +19,7 @@ df['hour'] = df.index.hour
 df['day_of_week'] = df.index.dayofweek
 
 # Create a pivot table for the heatmap
-pivot_table = df.pivot_table(values='swimmers', index='day_of_week', columns='hour', aggfunc='mean')
+pivot_table = df.pivot_table(values='swimmers', index='day_of_week', columns='hour', aggfunc='median')
 
 # Fill missing values with 0 or another appropriate value
 pivot_table = pivot_table.fillna(0)
@@ -43,7 +43,7 @@ fig = go.Figure(data=go.Heatmap(
 
 # Update layout
 fig.update_layout(
-    title='Hallenbad City (Zürich): Average Count of Swimmers by Day and Hour',
+    title='Hallenbad City (Zürich): Median Count of Swimmers by Day and Hour',
     xaxis_title='Hour of Day',
     yaxis_title='Day of Week',
     xaxis=dict(tickmode='linear', tick0=0, dtick=1),
