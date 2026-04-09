@@ -14,6 +14,13 @@ df.set_index('ts_utc', inplace=True)
 zurich_tz = timezone('Europe/Zurich')
 df.index = df.index.tz_localize('UTC').tz_convert(zurich_tz)
 
+# Keep only last N weeks
+last_date = df.index.max()
+cutoff_date = last_date - pd.Timedelta(weeks=6)
+df = df[df.index >= cutoff_date]
+
+print(f"Filtering data from {cutoff_date.date()} to {last_date.date()}")
+
 # Extract hour and day of week
 df['hour'] = df.index.hour
 df['day_of_week'] = df.index.dayofweek
