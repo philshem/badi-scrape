@@ -1,20 +1,18 @@
-# Use lightweight Python image with Chromium support
-FROM python:3.11-slim
+# Use full Python 3.14 for better runtime performance (optimized wheels, pre-compiled libraries)
+FROM python:3.14
 
 # Set the working directory
 WORKDIR /app
 
-# Install only needed dependencies: chromium, wget for downloads, and ca-certificates
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    chromium-browser \
-    chromium-driver \
-    ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copy Python dependencies first (leverages Docker layer caching)
+# Copy Python dependencies first
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Install Chromium and upgrade pip/install dependencies in parallel
+RUN apt-get update && \
+    apt-get install -y chromium chromium-driver && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Create data directory
 RUN mkdir -p data
